@@ -37,7 +37,7 @@ export default function TransactionsPage({ flaggedOnly = false }) {
   const title = flaggedOnly ? "Fraud Alerts Center" : "All Monitored Transactions";
   const subtitle = flaggedOnly
     ? "Real-time stream of transactions that triggered engine fraud rules"
-    : "Comprehensive audit explorer of all transactions evaluated by Sentinel Fraud";
+    : "Comprehensive audit explorer of all transactions evaluated by FraudForge";
 
   return (
     <div className="space-y-5">

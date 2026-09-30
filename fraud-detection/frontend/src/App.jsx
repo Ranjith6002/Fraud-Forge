@@ -52,10 +52,9 @@ export default function App() {
   }
 
   const linkCls = ({ isActive }) =>
-    `flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-semibold tracking-wide transition-all ${
-      isActive
-        ? "bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 shadow-md shadow-cyan-950/20"
-        : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-200"
+    `flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-semibold tracking-wide transition-all ${isActive
+      ? "bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 shadow-md shadow-cyan-950/20"
+      : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-200"
     }`;
 
   return (
@@ -80,7 +79,7 @@ export default function App() {
               <div>
                 <div className="flex items-center gap-2">
                   <span className="text-base font-extrabold tracking-tight text-white font-sans">
-                    Sentinel<span className="text-cyan-400">Fraud</span>
+                    Fraud<span className="text-cyan-400">Forge</span>
                   </span>
                   <span className="hidden sm:inline-block rounded-full bg-cyan-500/10 border border-cyan-500/30 px-2 py-0.2 text-[10px] font-mono text-cyan-400">
                     v1.0 SOC
@@ -182,8 +181,8 @@ export default function App() {
                 <UserIcon className="w-4 h-4" />
               </div>
               <div className="hidden lg:block text-left">
-                <p className="text-xs font-semibold text-slate-200 leading-tight">Analyst Ops</p>
-                <p className="text-[10px] font-mono text-slate-400">admin@sentinel</p>
+                <p className="text-xs font-semibold text-slate-200 leading-tight">Admin</p>
+                <p className="text-[10px] font-mono text-slate-400">admin@fraudforge</p>
               </div>
             </div>
           </div>
@@ -194,9 +193,8 @@ export default function App() {
       <div className="flex-1 mx-auto flex w-full max-w-[1600px]">
         {/* SIDEBAR */}
         <aside
-          className={`fixed inset-y-0 left-0 z-30 w-64 bg-[#0F1420] border-r border-slate-800/80 p-4 transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
-            sidebarOpen ? "translate-x-0 pt-20" : "-translate-x-full"
-          }`}
+          className={`fixed inset-y-0 left-0 z-30 w-64 bg-[#0F1420] border-r border-slate-800/80 p-4 transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${sidebarOpen ? "translate-x-0 pt-20" : "-translate-x-full"
+            }`}
         >
           <nav className="space-y-1" aria-label="Main Navigation">
             <p className="px-3 py-2 text-[10px] font-mono uppercase tracking-widest text-slate-400 font-bold">
