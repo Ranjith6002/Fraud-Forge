@@ -7,6 +7,9 @@ from sqlalchemy.pool import StaticPool
 
 from app.config import get_settings
 
+import urllib.parse
+from sqlalchemy.engine import make_url
+
 logger = logging.getLogger(__name__)
 
 
@@ -14,7 +17,34 @@ class Base(DeclarativeBase):
     pass
 
 
-def _make_engine(url: str):
+def _normalize_url(url: str) -> str:
+    if not url:
+        return url
+    if url.startswith("postgres://"):
+        url = "postgresql+psycopg2://" + url[11:]
+    elif url.startswith("postgresql://"):
+        url = "postgresql+psycopg2://" + url[13:]
+
+    try:
+        parsed = make_url(url)
+        if parsed.host and ("@" in parsed.host or "#" in parsed.host):
+            scheme, rest = url.split("://", 1)
+            last_at_idx = rest.rfind("@")
+            if last_at_idx != -1:
+                userinfo = rest[:last_at_idx]
+                host_db = rest[last_at_idx + 1:]
+                if ":" in userinfo:
+                    user, password = userinfo.split(":", 1)
+                    safe_pass = urllib.parse.quote(urllib.parse.unquote(password), safe="")
+                    url = f"{scheme}://{user}:{safe_pass}@{host_db}"
+    except Exception:
+        pass
+
+    return url
+
+
+def _make_engine(raw_url: str):
+    url = _normalize_url(raw_url)
     kwargs = {}
     if url.startswith("sqlite"):
         kwargs["connect_args"] = {"check_same_thread": False}

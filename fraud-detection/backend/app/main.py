@@ -49,6 +49,25 @@ def create_app() -> FastAPI:
         return {"service": settings.app_name, "version": settings.app_version, "status": "ok",
                 "database": db_status, "docs": "/docs"}
 
+    @app.get("/api/health/database", tags=["health"], summary="Database status and dialect check")
+    def db_health():
+        try:
+            db_type = engine.dialect.name
+            with engine.connect() as conn:
+                conn.execute(text("SELECT 1"))
+            return {
+                "status": "connected",
+                "database_type": "PostgreSQL" if "postgres" in db_type.lower() else db_type,
+                "driver": engine.driver,
+                "pool_status": "active"
+            }
+        except Exception as exc:
+            return {
+                "status": "error",
+                "detail": str(exc)
+            }
+
+
     @app.exception_handler(SQLAlchemyError)
     async def db_error_handler(request: Request, exc: SQLAlchemyError):
         logger.exception("Database error on %s %s", request.method, request.url.path)

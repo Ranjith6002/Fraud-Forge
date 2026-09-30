@@ -18,7 +18,7 @@ services:
   backend:
     build: ./backend
     environment:
-      DATABASE_URL: postgresql+psycopg2://fraud:fraud@postgres:5432/fraud
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg2://fraud:fraud@postgres:5432/fraud}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173}
       NOTIFICATION_PROVIDER: ${NOTIFICATION_PROVIDER:-auto}
       EXTRA_RULES: ${EXTRA_RULES:-}

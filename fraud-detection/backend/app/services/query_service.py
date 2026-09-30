@@ -27,14 +27,23 @@ def list_transactions(
     if status:
         conditions.append(Transaction.review_status == status.value)
     if search and search.strip():
-        needle = search.strip().replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+        raw_search = search.strip()
+        needle = raw_search.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
         pattern = f"%{needle}%"
+        
+        # Also build hyphen/space stripped variant for flexible transaction_id and user_id searching
+        clean_needle = raw_search.replace("-", "").replace(" ", "").replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+        clean_pattern = f"%{clean_needle}%"
+
         conditions.append(
             Transaction.transaction_id.ilike(pattern, escape="\\")
+            | func.replace(func.replace(Transaction.transaction_id, "-", ""), " ", "").ilike(clean_pattern, escape="\\")
             | Transaction.user_id.ilike(pattern, escape="\\")
+            | func.replace(func.replace(Transaction.user_id, "-", ""), " ", "").ilike(clean_pattern, escape="\\")
             | Transaction.merchant.ilike(pattern, escape="\\")
             | Transaction.location.ilike(pattern, escape="\\")
         )
+
 
     column = SORT_COLUMNS.get(sort_by, Transaction.timestamp)
     primary = column.asc() if order == "asc" else column.desc()
