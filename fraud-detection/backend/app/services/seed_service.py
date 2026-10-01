@@ -81,12 +81,17 @@ def seed_demo_data(db: Session, service: TransactionService, reset: bool = True)
         # 1. Seed dynamic rule configurations
         seed_rules_if_needed(db, reset=reset)
 
-        # 2. Reset transaction tables if requested
+        # 2. Reset transaction tables if requested and restart sequence ID counters from 1
         if reset:
-            db.execute(delete(Review))
-            db.execute(delete(FraudFlag))
-            db.execute(delete(Transaction))
+            try:
+                from sqlalchemy import text
+                db.execute(text("TRUNCATE TABLE reviews, fraud_flags, transactions RESTART IDENTITY CASCADE"))
+            except Exception:
+                db.execute(delete(Review))
+                db.execute(delete(FraudFlag))
+                db.execute(delete(Transaction))
             db.commit()
+
 
         created = flagged = high = medium = 0
         dataset = build_demo_dataset(utcnow())

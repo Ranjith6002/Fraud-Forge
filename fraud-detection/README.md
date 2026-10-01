@@ -1,6 +1,6 @@
 # Fraud Rule Engine with Review Console
 
-A pluggable fraud-detection engine (FastAPI + PostgreSQL) with a React reviewer console.
+A fraud-detection engine (FastAPI + PostgreSQL) with a React reviewer console.
 Transactions are scored by independent rules; risky ones are flagged, alerted via AWS SNS/SES,
 and investigated by reviewers who mark them **Reviewed** or **Cleared** with a full audit trail.
 
